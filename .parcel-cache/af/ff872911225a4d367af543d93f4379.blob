@@ -1,0 +1,19 @@
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _parentEl = new WeakMap();
+
+class SearchView {
+  constructor() {
+    _parentEl.set(this, {
+      writable: true,
+      value: document.querySelector(".search")
+    });
+
+    _defineProperty(this, "searchBtn", document.querySelector(".search__btn"));
+  }
+
+  dislay() {
+    searchBtn.addEventListener("click", controlSearchResults);
+  }
+
+}

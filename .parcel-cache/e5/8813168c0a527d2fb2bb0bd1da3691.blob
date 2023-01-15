@@ -1,0 +1,78 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _view = _interopRequireDefault(require("./view.js"));
+
+var _icons = _interopRequireDefault(require("url:../../img/icons.svg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+class PaginationView extends _view.default {
+  constructor(...args) {
+    super(...args);
+
+    _defineProperty(this, "_parentElement", document.querySelector(".pagination"));
+  }
+
+  addHandlerClick(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".btn--inline");
+      if (!btn) return;
+      const goToPage = btn.dataset.goto;
+      console.log(goToPage);
+    });
+  }
+
+  _generateMarkup() {
+    console.log(this._data);
+    const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
+    console.log(numPages);
+    const _curPage = this._data.page;
+    console.log(_curPage); // 1)first page,more pages exist
+
+    if (this._data.page === 1 && numPages > 1) return `
+          <button data-goto="${_curPage + 1}" class="btn--inline  pagination__btn--next">
+            <span>Page  ${_curPage + 1}</span>
+            <svg class="search__icon">
+              <use href="${_icons.default}#icon-arrow-right"></use>
+            </svg>
+          </button>`; // 2)last page,no more pages
+
+    if (this._data.page === numPages && numPages > 1) return `          
+          <button data-goto="${_curPage - 1}" class="btn--inline  pagination__btn--prev">
+            <svg class="search__icon">
+              <use href="${_icons.default}#icon-arrow-left"></use>
+            </svg>
+            <span>Page ${_curPage - 1}</span>
+          </button>
+    `; // 3)other page
+
+    if (this._data.page < numPages) return `
+                <button data-goto="${_curPage - 1}" class="btn--inline  pagination__btn--prev">
+            <svg class="search__icon">
+              <use href="${_icons.default}#icon-arrow-left"></use>
+            </svg>
+            <span>Page  ${_curPage - 1}</span>
+          </button>
+              <button data-goto="${_curPage + 1}" class="btn--inline  pagination__btn--next">
+            <span>Page  ${_curPage + 1}</span>
+            <svg class="search__icon">
+              <use href="${_icons.default}#icon-arrow-right"></use>
+            </svg>
+          </button>
+  `; // 4)page 1,no other pages
+
+    return ` `;
+  }
+
+}
+
+var _default = new PaginationView();
+
+exports.default = _default;

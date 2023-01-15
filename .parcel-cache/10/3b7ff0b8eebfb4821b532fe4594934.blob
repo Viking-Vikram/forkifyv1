@@ -1,0 +1,88 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.View = void 0;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _clear = new WeakSet();
+
+class View {
+  constructor() {
+    _clear.add(this);
+
+    _defineProperty(this, "_data", void 0);
+  }
+
+  render(data) {
+    this._data = data;
+
+    const markup = this._generateMarkup();
+
+    this._clear();
+
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  renderSpinner() {
+    const markup = `
+  <div class="spinner">
+   <svg>
+    <use href="${icons}#icon-loader"></use>
+   </svg>
+  </div> 
+ `;
+
+    this._clear();
+
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  renderError(message = this._errorMessage) {
+    const markup = `
+   <div class="error">
+    <div>
+     <svg>
+      <use href="${icons}#icon-alert-triangle"></use>
+     </svg>
+    </div>
+    <p>${message}</p>
+   </div>
+  `;
+
+    this._clear();
+
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  renderSuccess(message = this._message) {
+    const markup = `
+   <div class="message">
+    <div>
+     <svg>
+      <use href="${icons}#icon-smile"></use>
+     </svg>
+    </div>
+    <p>${message}</p>
+   </div>
+  `;
+
+    this._clear();
+
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  addHandlerRender(handler) {
+    ["hashchange", "load"].forEach(ev => window.addEventListener(ev, handler)); // window.addEventListener("load", controlRecipe);
+    // window.addEventListener("hashchange", controlRecipe);
+  }
+
+}
+
+exports.View = View;
+
+var _clear2 = function _clear2() {
+  this._parentElement.innerHTML = "";
+};
